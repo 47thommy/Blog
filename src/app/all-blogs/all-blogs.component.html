@@ -1,0 +1,66 @@
+<div class="container blogSection">
+    <div class="row py-5">
+
+      <div class="col-md-9 col-12" *ngIf="allBlogs.loading || allBlogs.error">
+        {{ allBlogs.loading ? 'Loading...' : allBlogs.error }}
+      </div>
+
+        <div class="col-md-9 col-12 mb-2" *ngIf="!allBlogs.loading && !allBlogs.error">
+          <p *ngIf="!allBlogs.items.length">
+            <i class="fa fa-exclamation-triangle me-2" aria-hidden="true"></i> No blog found for the selected category!
+          </p>
+          
+            <div class="row" *ngIf="allBlogs.items.length">
+                <p class="section-title"> <i class="fa fa-paperclip me-2" aria-hidden="true"></i> 
+                  {{ currentCategoryId == 'all' ? 'All' : (allBlogs.items[0].category.name | titlecase) }} topic blogs
+                </p>
+
+                <nav aria-label="...">
+                    <ul class="pagination pagination-sm">
+                      <li class="page-item" [class.active]="(page+1) == allBlogs.currentPage" *ngFor="let page of allBlogs.totalPages">
+                          <a class="page-link" (click)="changePage(page+1)"> {{ page+1 }} </a>
+                        </li>
+                    </ul>
+                  </nav>
+
+                <!-- blogs -->
+                <div class="row" *ngIf="!allBlogs.error && !allBlogs.loading">
+
+                  <p *ngIf="!allBlogs.items.length">
+                    No blogs found!
+                  </p>
+
+                  <div class="col-md-4 col-12" *ngFor="let blog of allBlogs.items">
+                      <div class="card blogs" style="width: 100%;">
+                          <div class="img">
+                              <img [src]="blog.img" class="card-img-top">
+                          </div>
+
+                          <div class="card-body">
+
+                            <h5 class="card-title">
+                                <a [routerLink]="['/blog', blog._id]">
+                                {{ blog.title }}
+                              </a>
+                            </h5>
+                            
+                            <p class="card-text">
+                              <i class="fa fa-user-circle-o" aria-hidden="true"></i> {{ blog.writter.first_name }}
+                              <br>
+                              <i class="fa fa-bookmark" aria-hidden="true"></i> {{ blog.category.name }}
+                            </p>
+                          </div>
+                        </div>
+                  </div>
+                </div>
+                <!-- blogs -->
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-12">
+          <app-category-component></app-category-component>
+        </div>
+
+    </div>
+</div>
